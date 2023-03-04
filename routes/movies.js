@@ -44,4 +44,36 @@ router.post("/movies",(req, res, next) =>{
     });
 })
 
+router.put("/movies/:id", (req, res, next) =>{
+    const {id} = req.params;
+    const {title, genres, year} = req.body;
+
+    const updateMovie =
+    `UPDATE movies
+    SET title = $1, genres = $2, year = $3,
+    WHERE movies.id = $4`
+
+    pool.query(updateMovie, [title, genres, year, id], (err, result) => {
+        if (err) next(err);
+
+        res.status(201).json({message: "Movie updated"});
+    })
+})
+
+router.delete("/movies/:id", (req, res, next) =>{
+
+    const {id} = req.params;
+
+    const deleteMovie = `
+    DELETE FROM movies
+    WHERE id = $1`
+
+    pool.query(deleteMovie, [id], (err, result) => {
+        if (err) next(err);
+    
+        res.status(201).json({message: "Movie deleted"});
+    })
+})
+
+
 module.exports = router;
