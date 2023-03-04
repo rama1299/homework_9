@@ -57,7 +57,7 @@ router.post("/register", (req, res, next) => {
     VALUES ($1, $2, $3, $4);`
 
     pool.query(insertUser, [email, gender, hash, role], (err, result) => {
-        //disini hash gak bisa masuk, padahal sudah work, kayanya dari settingan password users databasenya
+
         if(err) next(err);
 
         res.status(201).json({

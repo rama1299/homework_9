@@ -6,6 +6,9 @@ errorHandler = (err, req, res, next) => {
     }else if(err.name === "ErrorWrongPassword"){
         res.status(404).json({
             message: "Worng Password Username"})
+    }else if(err.name === "Unauthenticated"){
+        res.status(404).json({
+            message: "Worng Password Username"})
     }else{
         res.status(500).json({
             massage: "internal Server Error"
