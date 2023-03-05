@@ -1,21 +1,46 @@
-const jwt = require('jwt');
+const jwt = require("jsonwebtoken");
 const secretKey = "RAHASIALAH";
+const pool= require("../config");
 
-const authentication = (req, res, next)=>{
-    console.log(req.headers);
+function authentic (req, res, next) {
     const {token} = req.headers;
 
-    if(token){
-        const decoded = jwt.decode(token, secretKey);
+    if (token) {
+        try{
+            const decoded = jwt.verify(token,secretKey);
+            const {email, role} = decoded;
+            const findUser =
+            `SELECT *
+            FROM users
+            Where email = $1`
 
-        console.log(decoded);
+            pool.query(findUser, [email], (err, result)=>{
+                if(err) next(err);
+
+                if(result.rows.length === 0){
+                    next ({name: "ErrorNotFound"})
+                } else{
+                    const user = result.rows[0];
+                    req.loggedUser = {
+                        id: user.id,
+                        email: user.email,
+                        role: user.role
+                    }
+                    next();
+                }
+
+            })
+        }
+        catch (err) {
+            next({name: "JWTError"})
+        }
     }else{
-        next({name: "Unauthenticated"})
+        next({name: "Unauthenticated",})
     }
 }
 
-const authorization = (req, res, next)=>{
-    console.log("Authorization")
+function authoriz (req, res, next) {
+    console.log('masook');
 }
 
-module.export = authentication;
+module.exports = {authentic, authoriz};

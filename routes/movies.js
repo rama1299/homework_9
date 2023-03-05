@@ -3,6 +3,7 @@ const router = express.Router();
 const pool = require ("../config.js");
 
 router.get("/movies", (req, res, next) => {
+    console.log(req.loggedUser);
     const findQuery = 
         `SELECT *
         FROM movies`

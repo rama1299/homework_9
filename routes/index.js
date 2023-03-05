@@ -6,6 +6,8 @@ const bcrypt = require("bcrypt");
 const salt = bcrypt.genSaltSync(10);
 const jwt = require("jsonwebtoken");
 const secretKey = "RAHASIALAH";
+const {authentic} = require("../middlewares/auth.js");
+
 
 router.post("/login", (req, res, next) => {
     const {email, password} = req.body;
@@ -66,6 +68,7 @@ router.post("/register", (req, res, next) => {
     })
 })
 
+router.use(authentic);
 router.use("/", moviesRouter);
 
 module.exports = router;
