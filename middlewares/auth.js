@@ -40,7 +40,14 @@ function authentic (req, res, next) {
 }
 
 function authoriz (req, res, next) {
-    console.log('masook');
+    console.log(req.loggedUser);
+    const {id, email, role} = req.loggedUser;
+
+    if(role === "Developer"){
+        next();
+    }else{
+        next({name: "Unauthorized"});
+    }
 }
 
 module.exports = {authentic, authoriz};
