@@ -5,7 +5,9 @@ const router = require("./routes/index.js")
 const errorHandler = require("./middlewares/errorhandler.js")
 const swaggerUi = require ("swagger-ui-express")
 const moviesJson = require('./movies.json')
+const morgan = require("morgan")
 
+app.use(morgan());
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(moviesJson))
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
